@@ -9,32 +9,53 @@ This repository contains an open-source, highly configurable RTL implementation 
 
 ```
 secure-chacha20-poly1305-hw/
-├── README.md                 # Main project documentation, architecture details, and usage.
-├── LICENSE                   # Open-source license (MIT).
-├── .gitignore                # Essential for ignoring simulator and synthesis junk files.
+├── README.md                            # Main project documentation.
+├── LICENSE                              # Open-source license (MIT).
+├── .gitignore                           # Ignoring simulator and synthesis junk files.
 │
-├── rtl/                      # Synthesizable design files (VHDL / Verilog / SystemVerilog).
-│   ├── standard/             # Source code for the base architecture (unprotected).
-│   ├── secure/               # Source code for the masked variant (TI, SDRR, blinded Karatsuba).
-│   └── common/               # Shared modules used by both architectures.
+├── rtl/                                 # Synthesizable design files (SystemVerilog).
+│   ├── standard/                        # Base architecture (unprotected).
+│   ├── secure/                          # Masked variant (TI, SDRR, blinded Karatsuba).
+│   └── common/                          # Shared modules used by both architectures.
 │
-├── tb/                       # Testbenches and verification environments.
-│   ├── standard_tb/          # Testbench for the standard version.
-│   └── secure_tb/            # Testbench for the secure version (includes test vectors).
+├── tb/                                  # Testbenches and verification environments.
+│   ├── standard_tb/                     # Testbench for the standard version.
+│   └── secure_tb/                       # Testbench for the secure version.
 │
-├── bitstreams/               # Pre-compiled files ready for FPGA programming.
-│   ├── standard_artix7.bit   # Bitstream for the standard unprotected core.
-│   └── secure_artix7.bit     # Bitstream for the DPA-secure masked core.
+├── bitstreams/                          # Pre-compiled files ready for FPGA programming.
+│   ├── cw305_aead_unmasked.bit          # Bitstream for the standard unprotected core.
+│   └── cw305_aead_masked.bit            # Bitstream for the DPA-secure masked core.
 │
-└── evaluation/               # Scripts and physical evaluation data.
-    └── tvla_scripts/         # Python/MATLAB scripts used for the TVLA (t-test) computation.
+└── evaluation/                          # Scripts and physical evaluation data.
+    └── tvla_scripts/                    # Python scripts for TVLA (t-test) computation.
 ```
 
 ## Pre-compiled Bitstreams
 
 For immediate testing and deployment, the `bitstreams/` directory contains pre-compiled `.bit` files for both the standard and secure cores.
 
-**Hardware Target Note:** These bitstreams were specifically synthesized and routed for the **Xilinx Artix-7 FPGA** (e.g., `XC7A100T`). If you are targeting a different FPGA family or vendor, please re-synthesize the source files located in the `rtl/` directory using your preferred toolchain.
+| File                        | Description                                      |
+|-----------------------------|--------------------------------------------------|
+| `cw305_aead_unmasked.bit`   | Standard (unprotected) ChaCha20-Poly1305 core.   |
+| `cw305_aead_masked.bit`     | 1st-order DPA-secure masked core.                |
+
+### Hardware Target
+
+- **FPGA Board:** NewAE CW305
+- **FPGA Family:** Xilinx Artix-7
+- **Part Number:** XC7A100T-1CSG324C
+- **Toolchain:** Vivado 2023.2
+- **Frequency:** 100 MHz (post-place-and-route timing met)
+
+### Programming the FPGA
+
+Load the pre-compiled bitstream onto the CW305 board:
+
+```bash
+vivado -mode batch -source program_fpga.tcl -tclargs bitstreams/cw305_aead_unmasked.bit
+```
+
+If you are targeting a different FPGA family or board, re-synthesize from the RTL sources in the `rtl/` directory using your preferred EDA toolchain.
 
 ## Architecture Overview
 
@@ -78,20 +99,34 @@ The secure (masked) core provides 1st-order DPA resistance through:
    # vivado -mode batch -source run_sim.tcl
    ```
 
-### Programming the FPGA
+## TVLA Evaluation Scripts
 
-Load the pre-compiled bitstream onto a compatible Artix-7 board:
+The `evaluation/tvla_scripts/` directory contains scripts for Test Vector Leakage Assessment (TVLA) using the fixed vs. random t-test methodology.
 
-```bash
-vivado -mode batch -source program_fpga.tcl -tclargs bitstreams/standard_artix7.bit
-```
+| File                | Description                                                |
+|---------------------|------------------------------------------------------------|
+| `tvla_analysis.py`  | Main TVLA script — computes Welch's t-test on trace sets.  |
+| `requirements.txt`  | Python dependencies.                                       |
 
-### Running TVLA Evaluation
+### Quick Start
 
 ```bash
 cd evaluation/tvla_scripts/
-python tvla_analysis.py --traces <path_to_traces> --order 1
+pip install -r requirements.txt
+python tvla_analysis.py --fixed traces_fixed.npy --random traces_random.npy --order 1
 ```
+
+### Trace Format
+
+Traces are expected as NumPy `.npy` files with shape `(N, T)` where:
+- `N` = number of traces
+- `T` = number of time samples per trace
+
+### Supported Analysis Orders
+
+- `--order 1` : 1st-order (standard Welch's t-test)
+- `--order 2` : 2nd-order (centered-product preprocessing)
+- `--order 3` : 3rd-order (centered-product preprocessing)
 
 ## License
 
