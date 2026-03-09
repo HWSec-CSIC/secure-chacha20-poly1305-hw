@@ -10,7 +10,6 @@ This repository contains an open-source, highly configurable RTL implementation 
 ```
 secure-chacha20-poly1305-hw/
 ├── README.md                            # Main project documentation.
-├── LICENSE                              # Open-source license (MIT).
 ├── .gitignore                           # Ignoring simulator and synthesis junk files.
 │
 ├── rtl/                                 # Synthesizable design files (Verilog).
