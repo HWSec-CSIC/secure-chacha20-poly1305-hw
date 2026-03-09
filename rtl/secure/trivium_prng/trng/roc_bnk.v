@@ -1,7 +1,30 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Ring-oscillator bank (physically constrained).
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: roc_bnk.v
+// Module Name: roc_bnk
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 Ring_Oscillator Bank
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es
+//
+//      Verilog code for a physically-constrained Ring_Oscillator Bank
+//      This module acts as a "hard macro". It will be placed as a single unit
+//      by the tools, preserving the internal relative placements.
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module roc_bnk (
                 input  wire       enx,      //-- Enable X
                 input  wire       eny,      //-- Enable Y

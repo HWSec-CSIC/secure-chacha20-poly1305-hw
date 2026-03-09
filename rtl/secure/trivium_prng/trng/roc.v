@@ -1,7 +1,26 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Ring-oscillator cell.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: roc.v
+// Module Name: roc
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 Ring_Oscillator Bank
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module roc (
             input  wire       enx,      //-- Enable X
             input  wire       eny,      //-- Enable Y

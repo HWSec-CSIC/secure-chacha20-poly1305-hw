@@ -1,7 +1,27 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Single TRNG unit: 4 ROs, 2-challenge comparison, shift register output.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 14/07/2025
+// Design Name: trng_unit.v
+// Module Name: trng_unit
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_4.0 TRNG Unit
+//
+// Additional Comment:
+//
+//      Each bank_unit is comprised by 4 ROs, 2 challenges comparison. The outputs
+//      of the bank units fill a 32/64-bits shift register. 
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module trng_unit #(
                     parameter TRNG_SIM      = 0,                //-- Simulation?
                     parameter BANK_UNITS    = 1,                //-- Number of RO Banks per TRNG Unit

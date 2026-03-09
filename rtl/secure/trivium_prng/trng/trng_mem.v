@@ -1,7 +1,28 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Circular FIFO memory for TRNG output.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: trng_mem.v
+// Module Name: trng_mem
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 RAM Memory
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es. Modified circular FIFO never
+//      fulls to keep the ROs working, overwriting previous values, wr addr is
+//      no required, it is automatically updated.
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module trng_mem #(
                   parameter TRNG_SIZE  = 512,                   //-- TRNG memory size (bits)
                   parameter BLOCK_SIZE = 128,                   //-- TRNG output size (bits)

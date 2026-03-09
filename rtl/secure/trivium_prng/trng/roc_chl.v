@@ -1,7 +1,26 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Challenge generator for RO-based TRNG.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: roc_bnk.v
+// Module Name: roc_bnk
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 Challenge Generator
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 
 module roc_chl #(
                  parameter CG_TYPE = 1      //-- Challenge Generator Type: Counter(1), LFSR(2)

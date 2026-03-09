@@ -1,7 +1,27 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// TRNG controller.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 14/07/2025
+// Design Name: trng_ctrl.v
+// Module Name: trng_ctrl
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_3.0 Controller
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es. trng_ldr removed, the count
+//      is now managed by trng_shift.v
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module trng_ctrl (
                   input  wire clock,                  //-- System Clock
                   input  wire reset,                  //-- System Reset

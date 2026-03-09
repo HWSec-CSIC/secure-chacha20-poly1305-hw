@@ -1,7 +1,24 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// TRNG shift register.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 14/07/2025
+// Design Name: trng_shift.v
+// Module Name: trng_shift
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_4.0 Shift Register
+//
+// Additional Comment:
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module trng_shift #(
                     parameter Dbw = 32,                     //-- AXI4-Lite Data Bus Width (32/64 bits)
                     parameter Bpc = 4                       //-- Bits per comparison: Operation(4)

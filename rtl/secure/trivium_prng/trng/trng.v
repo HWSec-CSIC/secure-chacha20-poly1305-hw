@@ -1,7 +1,27 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// RO-based TRNG top module.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 14/07/2025
+// Design Name: trng.v
+// Module Name: trng
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_3.0 Top File
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es. Modified to include
+//      multiple TRNG Units with multiple RO banks.
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module trng #(
               parameter TRNG_SIM    = 0,                    //-- Simulation?
               parameter TRNG_UNITS  = 4,                    //-- Number of TRNG Units

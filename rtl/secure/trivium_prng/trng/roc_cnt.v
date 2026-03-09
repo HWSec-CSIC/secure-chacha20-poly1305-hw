@@ -1,7 +1,28 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Binary counter for RO-based TRNG.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: roc_cnt.v
+// Module Name: roc_cnt
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 Binary Counter
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es. Added a sel_nbc signal
+//      to allow dynamic reconfiguration of the number of bits of the counter.
+//      This additional control must be included in the control register.
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module roc_cnt #(
                  parameter Nbc = 14                     //-- Maximum Number of Bits of Counter
                  ) 

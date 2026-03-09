@@ -1,7 +1,26 @@
 `default_nettype none
 `timescale 1 ns / 10 ps
 
-// Bit extractor for RO-based TRNG.
+////////////////////////////////////////////////////////////////////////////////////
+// Company: IMSE-CNM CSIC
+// Engineer: Pablo Navarro Torrero
+// 
+// Create Date: 11/07/2025
+// Design Name: roc_bxt.v
+// Module Name: roc_bxt
+// Project Name: SE-QUBIP
+// Target Devices: PYNQ-Z2
+// Tool Versions:
+// Description: 
+//		
+//		Verilog code for TRNGR5_2.0 Bit Extractor
+//
+// Additional Comment:
+//
+//      Original VHDL by santiago@imse-cnm.csic.es
+//
+////////////////////////////////////////////////////////////////////////////////////
+
 module roc_bxt #(
                  parameter Nbc = 14                 //-- Maximum Number of bits of Counters
                  ) 

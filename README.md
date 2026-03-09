@@ -83,7 +83,7 @@ The secure (masked) core provides 1st-order DPA resistance through:
 
 - A Verilog/SystemVerilog simulator (e.g., Vivado Simulator, ModelSim, Verilator).
 - Xilinx Vivado Design Suite (for synthesis and bitstream generation).
-- Python 3.8+ (for TVLA evaluation scripts).
+- Python 3.8+ with `chipwhisperer`, `numpy`, `scipy`, `h5py`, `tqdm`, `bokeh`, and `pycryptodome` (for TVLA evaluation scripts — see [TVLA Evaluation Scripts](#tvla-evaluation-scripts) for details).
 
 ### Running the Testbenches
 
@@ -111,18 +111,62 @@ The `scripts/` directory contains Jupyter notebooks for Test Vector Leakage Asse
 | `02_capture_aead_unmasked.ipynb`    | Trace acquisition for the unmasked (standard) core.        |
 | `03_tvla_compute.ipynb`             | Welch's t-test computation and plotting.                   |
 
-### Quick Start
+### Hardware Requirements
+
+| Component | Specification |
+|-----------|---------------|
+| **FPGA Board** | NewAE CW305 (Artix-7 XC7A100T) |
+| **SCA Scope** | ChipWhisperer Lite, Pro, or Husky |
+| **Connection** | USB between host, scope, and target board |
+
+Both the scope and the CW305 must be connected to the host PC via USB before running the capture notebooks.
+
+### Python Dependencies
+
+The notebooks require **Python 3.8+** and the following packages:
+
+| Package | Purpose |
+|---------|---------|
+| `chipwhisperer` | Scope control, FPGA programming, trace capture |
+| `numpy` | Numerical computation |
+| `scipy` | Statistical functions (Welch's t-test) |
+| `h5py` | HDF5 trace storage and streaming |
+| `tqdm` | Progress bars during capture and analysis |
+| `bokeh` | Interactive trace visualization |
+| `pycryptodome` | Reference ChaCha20-Poly1305 for verification |
+| `jupyter` | Notebook execution environment |
+
+Install all dependencies with:
+
+```bash
+pip install chipwhisperer numpy scipy h5py tqdm bokeh pycryptodome jupyter
+```
+
+> **Note:** On Linux, USB access to ChipWhisperer hardware may require udev rules.
+> Follow the [ChipWhisperer installation guide](https://chipwhisperer.readthedocs.io/en/latest/linux-install.html) for platform-specific setup.
+
+### Workflow
+
+Run the notebooks **in order** from the repository root:
 
 ```bash
 cd scripts/
 jupyter notebook
 ```
 
+1. **`01_capture_aead_masked.ipynb`** — Programs the CW305 with `cw305_aead_masked.bit`, runs a functional verification pass (1 000 random test vectors), then captures power traces in a fixed-vs-random (R-F-F-R) pattern. Traces are saved as HDF5 files in `data/combined/`.
+
+2. **`02_capture_aead_unmasked.ipynb`** — Same flow using `cw305_aead_unmasked.bit` (the standard unprotected core). This serves as the **baseline** that is expected to exhibit clear first-order leakage.
+
+3. **`03_tvla_compute.ipynb`** — Loads the HDF5 trace sets, computes the first-order Welch's t-statistic per time sample using a memory-efficient streaming algorithm, applies Bonferroni correction, and produces the final leakage plots in `plots/`.
+
 ### Trace Format
 
-Traces are expected as NumPy `.npy` files with shape `(N, T)` where:
-- `N` = number of traces
-- `T` = number of time samples per trace
+Traces are stored as HDF5 files (`.h5`) with LZF compression. Each file contains separate datasets for the *fixed* and *random* trace groups, with shape `(N, T)` where `N` is the number of traces and `T` the number of time samples per trace.
+
+### Configuration
+
+All paths, bitstream references, and statistical parameters are centralised in [`src/config.py`](src/config.py). Modify this file to adjust thresholds, chunk sizes, or output directories.
 
 ## License
 
