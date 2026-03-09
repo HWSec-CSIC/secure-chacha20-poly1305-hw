@@ -1,0 +1,8 @@
+CW305 Interface Hierarchy. Missing files can be found in Chipwhisperer CW305 AES Example (chipwhisperer\firmware\fpgas\aes\hdl)
+
+cw305_top.v
+    |- cw305_reg_if.v
+    |- cw305_usb_reg_fe.v
+    |- cw305_aux_itf.v
+    |- clocks.v
+    |- aead_itf.v

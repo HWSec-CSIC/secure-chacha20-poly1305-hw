@@ -13,21 +13,30 @@ secure-chacha20-poly1305-hw/
 ├── LICENSE                              # Open-source license (MIT).
 ├── .gitignore                           # Ignoring simulator and synthesis junk files.
 │
-├── rtl/                                 # Synthesizable design files (SystemVerilog).
+├── rtl/                                 # Synthesizable design files (Verilog).
 │   ├── standard/                        # Base architecture (unprotected).
 │   ├── secure/                          # Masked variant (TI, SDRR, blinded Karatsuba).
+│   ├── cw305_interface/                 # CW305 board interface (USB, clocks, registers).
 │   └── common/                          # Shared modules used by both architectures.
 │
 ├── tb/                                  # Testbenches and verification environments.
 │   ├── standard_tb/                     # Testbench for the standard version.
 │   └── secure_tb/                       # Testbench for the secure version.
 │
+├── src/                                 # Python support modules for scripts.
+│   ├── config.py                        # Centralised paths and parameters.
+│   ├── itf_driver.py                    # CW305 ITF register driver.
+│   ├── aead_helpers.py                  # AEAD packing and test-vector routines.
+│   └── tvla_core.py                     # Online Welch's t-test implementation.
+│
 ├── bitstreams/                          # Pre-compiled files ready for FPGA programming.
 │   ├── cw305_aead_unmasked.bit          # Bitstream for the standard unprotected core.
 │   └── cw305_aead_masked.bit            # Bitstream for the DPA-secure masked core.
 │
-└── evaluation/                          # Scripts and physical evaluation data.
-    └── tvla_scripts/                    # Python scripts for TVLA (t-test) computation.
+└── scripts/                             # Jupyter notebooks for TVLA evaluation.
+    ├── 01_capture_aead_masked.ipynb     # Trace acquisition for the masked core.
+    ├── 02_capture_aead_unmasked.ipynb   # Trace acquisition for the unmasked core.
+    └── 03_tvla_compute.ipynb            # TVLA (Welch's t-test) computation.
 ```
 
 ## Pre-compiled Bitstreams
@@ -45,17 +54,11 @@ For immediate testing and deployment, the `bitstreams/` directory contains pre-c
 - **FPGA Family:** Xilinx Artix-7
 - **Part Number:** XC7A100T-1CSG324C
 - **Toolchain:** Vivado 2023.2
-- **Frequency:** 100 MHz (post-place-and-route timing met)
+- **Target Frequency:** 100 MHz
 
 ### Programming the FPGA
 
-Load the pre-compiled bitstream onto the CW305 board:
-
-```bash
-vivado -mode batch -source program_fpga.tcl -tclargs bitstreams/cw305_aead_unmasked.bit
-```
-
-If you are targeting a different FPGA family or board, re-synthesize from the RTL sources in the `rtl/` directory using your preferred EDA toolchain.
+Load a pre-compiled bitstream onto the CW305 board using the Vivado Hardware Manager or the ChipWhisperer Python API. To re-synthesize for a different FPGA family or board, use the RTL sources in the `rtl/` directory with your preferred EDA toolchain.
 
 ## Architecture Overview
 
@@ -79,7 +82,7 @@ The secure (masked) core provides 1st-order DPA resistance through:
 
 ### Prerequisites
 
-- A Verilog/SystemVerilog simulator (e.g., Vivado Simulator, ModelSim, VCS).
+- A Verilog/SystemVerilog simulator (e.g., Vivado Simulator, ModelSim, Verilator).
 - Xilinx Vivado Design Suite (for synthesis and bitstream generation).
 - Python 3.8+ (for TVLA evaluation scripts).
 
@@ -101,19 +104,19 @@ The secure (masked) core provides 1st-order DPA resistance through:
 
 ## TVLA Evaluation Scripts
 
-The `evaluation/tvla_scripts/` directory contains scripts for Test Vector Leakage Assessment (TVLA) using the fixed vs. random t-test methodology.
+The `scripts/` directory contains Jupyter notebooks for Test Vector Leakage Assessment (TVLA) using the fixed vs. random t-test methodology with the ChipWhisperer CW305 platform.
 
-| File                | Description                                                |
-|---------------------|------------------------------------------------------------|
-| `tvla_analysis.py`  | Main TVLA script — computes Welch's t-test on trace sets.  |
-| `requirements.txt`  | Python dependencies.                                       |
+| Notebook                            | Description                                                |
+|-------------------------------------|------------------------------------------------------------|
+| `01_capture_aead_masked.ipynb`      | Trace acquisition for the masked (secure) core.            |
+| `02_capture_aead_unmasked.ipynb`    | Trace acquisition for the unmasked (standard) core.        |
+| `03_tvla_compute.ipynb`             | Welch's t-test computation and plotting.                   |
 
 ### Quick Start
 
 ```bash
-cd evaluation/tvla_scripts/
-pip install -r requirements.txt
-python tvla_analysis.py --fixed traces_fixed.npy --random traces_random.npy --order 1
+cd scripts/
+jupyter notebook
 ```
 
 ### Trace Format
@@ -122,15 +125,9 @@ Traces are expected as NumPy `.npy` files with shape `(N, T)` where:
 - `N` = number of traces
 - `T` = number of time samples per trace
 
-### Supported Analysis Orders
-
-- `--order 1` : 1st-order (standard Welch's t-test)
-- `--order 2` : 2nd-order (centered-product preprocessing)
-- `--order 3` : 3rd-order (centered-product preprocessing)
-
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+> *License details will be added after the blind-review process.*
 
 ## Citation
 
