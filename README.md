@@ -170,7 +170,7 @@ All paths, bitstream references, and statistical parameters are centralised in [
 
 ## License
 
-> *License details will be added after the blind-review process.*
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Citation
 
